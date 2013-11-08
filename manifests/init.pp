@@ -6,9 +6,9 @@
 #
 # Document parameters here.
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
-#   e.g. "Specify one or more upstream ntp servers as an array."
+# [*version*]
+#   Specify version of serf binary to download. Defaults to '0.2.0'
+#   http://serfdom.io does not currently provide a url for latest version.
 #
 # === Variables
 #
@@ -23,19 +23,54 @@
 #
 # === Examples
 #
+#  You can invoke this module with simply:
+#
+#  include serf
+#
+#  which is the equivalent of:
+#
 #  class { serf:
-#    servers => [ 'pool.ntp.org', 'ntp.local.company.com' ],
+#    version => '0.2.0',
+#    bin_dir => '/usr/local/bin'
 #  }
 #
 # === Authors
 #
-# Author Name <author@domain.com>
+# Justin Clayton <justin@claytons.net>
 #
 # === Copyright
 #
-# Copyright 2013 Your name here, unless otherwise noted.
+# Copyright 2013 Justin Clayton, unless otherwise noted.
 #
-class serf {
+class serf (
+  $version      = '0.2.0',
+  $bin_dir      = '/usr/local/bin',
+  $conf_dir     = '/etc/serf',
+  $arch         = $serf::params::arch,
+) inherits serf::params {
 
+  $download_url = "https://dl.bintray.com/mitchellh/serf/${version}_linux_${arch}.zip"
+
+  staging::file { 'serf.zip':
+    source => $download_url,
+  } ->
+
+  staging::extract { 'serf.zip':
+    target  => $bin_dir,
+    creates => "${bin_dir}/serf",
+  }
+
+  file { 'serf.upstart.init':
+    ensure  => file,
+    path    => '/etc/init/serf.conf',
+    mode    => '0755', # TODO: is this necessary?
+    content => template('serf/serf.upstart.init.erb'),
+  } ~>
+
+  service { 'serf':
+    enable   => true,
+    ensure   => running,
+    provider => 'upstart',
+  }
 
 }
