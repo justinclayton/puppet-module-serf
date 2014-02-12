@@ -11,4 +11,4 @@ description '
 project_page 'https://github.com/justinclayton/puppet-module-serf'
 
 ## Add dependencies, if any:
-dependency 'nanliu/staging'
+dependency 'nanliu/staging', '>= 0.3.1'
