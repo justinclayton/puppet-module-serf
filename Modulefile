@@ -6,8 +6,8 @@ license 'MIT'
 summary 'Downloads serf and manages serf agents'
 description '
   Downloads the serf binary from http://serfdom.io,
-  installs an EL-compatible SYSV init script,
-  and manages agent configuration in sysconfig'
+  installs the appropriate init script,
+  and manages agent configuration'
 project_page 'https://github.com/justinclayton/puppet-module-serf'
 
 ## Add dependencies, if any:

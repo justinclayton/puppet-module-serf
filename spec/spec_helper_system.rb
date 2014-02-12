@@ -19,5 +19,6 @@ RSpec.configure do |c|
     puppet_master_install
 
     puppet_module_install(:source => proj_root, :module_name => 'serf')
+    shell('puppet module install nanliu-staging')
   end
 end

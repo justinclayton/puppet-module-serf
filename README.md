@@ -1,8 +1,8 @@
 serf
 
 Downloads the serf binary from http://serfdom.io,
-installs an EL-compatible SYSV init script,
-and manages agent configuration in sysconfig
+installs an appropriate init script,
+and manages agent configuration
 
 License
 -------

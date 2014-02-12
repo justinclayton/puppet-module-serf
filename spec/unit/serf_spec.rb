@@ -1,9 +1,18 @@
 require 'spec_helper'
 
+$config_hash_param_value = {
+  "role" => "load-balancer",
+  "event_handlers" => [
+    "handle.sh",
+    "user:deploy=deploy.sh"
+  ]
+}
+
 describe 'serf', :type => :class do
   let(:params) {{
-    :version    => '0.2.0',
+    :version    => '0.4.1',
     :bin_dir    => '/usr/local/bin',
+    :config_hash => $config_hash_param_value,
   }}
 
   context 'on linux' do
@@ -17,7 +26,7 @@ describe 'serf', :type => :class do
         :architecture => 'i386',
       }}
       it 'should download serf' do
-        should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.2.0_linux_386.zip')
+        should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.4.1_linux_386.zip')
       end
       it 'should extract serf' do
         should contain_staging__extract('serf.zip').with({
@@ -32,7 +41,7 @@ describe 'serf', :type => :class do
         :architecture => 'x86_64',
       }}
       it 'should download serf' do
-        should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.2.0_linux_amd64.zip')
+        should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.4.1_linux_amd64.zip')
       end
       it 'should extract serf' do
         should contain_staging__extract('serf.zip').with({
@@ -50,18 +59,23 @@ describe 'serf', :type => :class do
         expect { subject }.to raise_error(Puppet::Error,/Unsupported kernel architecture \"fuuuu\"/)
       end
     end
-    it 'should manage a config file' do
-      pending 'use json erb'
+    it 'should manage configs' do
+      should contain_file('config.json').with({
+        :path => '/etc/serf/config.json',
+      })
+    end
+    it 'should manage event handler scripts' do
+      pending 'not sure if i even need this'
+      should contain_file('/etc/serf/handlers')
     end
     it 'should manage serf agent as a service' do
-      should contain_file('serf.upstart.init').with({
-        :path => '/etc/init/serf.conf',
+      should contain_file('serf.sysv.init').with({
+        :path => '/etc/init.d/serf',
         :mode => '0755',
       })
       should contain_service('serf').with({
         :enable   => true,
         :ensure   => 'running',
-        :provider => 'upstart',
       })
     end
   end

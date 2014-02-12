@@ -1,26 +1,17 @@
 # == Class: serf
 #
-# Full description of class serf here.
+#   Downloads the serf binary from http://serfdom.io,
+#   installs the appropriate init script,
+#   and manages agent configuration
 #
 # === Parameters
 #
-# Document parameters here.
-#
 # [*version*]
-#   Specify version of serf binary to download. Defaults to '0.2.0'
+#   Specify version of serf binary to download. Defaults to '0.4.1'
 #   http://serfdom.io does not currently provide a url for latest version.
 #
-# === Variables
-#
-# Here you should define a list of variables that this module would require.
-#
-# [*sample_variable*]
-#   Explanation of how this variable affects the funtion of this class and if
-#   it has a default. e.g. "The parameter enc_ntp_servers must be set by the
-#   External Node Classifier as a comma separated list of hostnames." (Note,
-#   global variables should be avoided in favor of class parameters as
-#   of Puppet 2.6.)
-#
+# [*handlers_dir*]
+#   Where to put the event handler scripts managed by this module.
 # === Examples
 #
 #  You can invoke this module with simply:
@@ -30,7 +21,7 @@
 #  which is the equivalent of:
 #
 #  class { serf:
-#    version => '0.2.0',
+#    version => '0.4.1',
 #    bin_dir => '/usr/local/bin'
 #  }
 #
@@ -40,13 +31,18 @@
 #
 # === Copyright
 #
-# Copyright 2013 Justin Clayton, unless otherwise noted.
+# Copyright 2014 Justin Clayton, unless otherwise noted.
 #
 class serf (
-  $version      = '0.2.0',
-  $bin_dir      = '/usr/local/bin',
-  $conf_dir     = '/etc/serf',
-  $arch         = $serf::params::arch,
+  $version              = '0.4.1',
+  $bin_dir              = '/usr/local/bin',
+  $conf_dir             = '/etc/serf',
+  $handlers_dir         = '/etc/serf/handlers',
+  $arch                 = $serf::params::arch,
+  $init_script_url      = $serf::params::init_script_url,
+  $init_script_dir      = $serf::params::init_script_dir,
+  $init_script_filename = $serf::params::init_script_filename,
+  $config_hash          = {}
 ) inherits serf::params {
 
   $download_url = "https://dl.bintray.com/mitchellh/serf/${version}_linux_${arch}.zip"
@@ -58,19 +54,33 @@ class serf (
   staging::extract { 'serf.zip':
     target  => $bin_dir,
     creates => "${bin_dir}/serf",
-  }
+  } ->
 
-  file { 'serf.upstart.init':
-    ensure  => file,
-    path    => '/etc/init/serf.conf',
-    mode    => '0755', # TODO: is this necessary?
-    content => template('serf/serf.upstart.init.erb'),
+  file { [$conf_dir, $handlers_dir]:
+    ensure  => directory,
+  } ->
+
+  staging::file { $init_script_filename:
+    source => $init_script_url,
+    target => $init_script_dir,
+  } ->
+
+  file { 'config.json':
+    ensure => file,
+    path   => "${conf_dir}/config.json",
+    content => template('serf/config.json.erb'),
   } ~>
+
+  # file { 'serf.sysv.init':
+  #   ensure  => file,
+  #   path    => '/etc/init.d/serf',
+  #   mode    => '0755',
+  #   content => template('serf/serf.sysv.init.erb'),
+  # } ~>
 
   service { 'serf':
     enable   => true,
     ensure   => running,
-    provider => 'upstart',
   }
 
 }
