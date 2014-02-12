@@ -40,8 +40,7 @@ class serf (
   $handlers_dir         = '/etc/serf/handlers',
   $arch                 = $serf::params::arch,
   $init_script_url      = $serf::params::init_script_url,
-  $init_script_dir      = $serf::params::init_script_dir,
-  $init_script_filename = $serf::params::init_script_filename,
+  $init_script_path     = $serf::params::init_script_path,
   $config_hash          = {}
 ) inherits serf::params {
 
@@ -60,27 +59,24 @@ class serf (
     ensure  => directory,
   } ->
 
-  staging::file { $init_script_filename:
+  staging::file { 'serf-init':
     source => $init_script_url,
-    target => $init_script_dir,
+    target => $init_script_path,
   } ->
 
-  file { 'config.json':
-    ensure => file,
-    path   => "${conf_dir}/config.json",
-    content => template('serf/config.json.erb'),
-  } ~>
-
-  # file { 'serf.sysv.init':
-  #   ensure  => file,
-  #   path    => '/etc/init.d/serf',
-  #   mode    => '0755',
-  #   content => template('serf/serf.sysv.init.erb'),
-  # } ~>
-
-  service { 'serf':
-    enable   => true,
-    ensure   => running,
+  file { $init_script_path:
+    mode    => '0755',
+    notify  => Service['serf'],
   }
 
+  file { 'config.json':
+    path   => "${conf_dir}/config.json",
+    content => template('serf/config.json.erb'),
+    notify  => Service['serf'],
+  }
+
+  service { 'serf':
+    enable => true,
+    ensure => running,
+  }
 }

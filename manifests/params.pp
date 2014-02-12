@@ -16,13 +16,11 @@ class serf::params {
   case $::osfamily {
     'redhat': {
       $init_script_url      = 'https://raw.github.com/hashicorp/serf/master/ops-misc/serf.sysv.init'
-      $init_script_dir      = '/etc/init.d'
-      $init_script_filename = 'serf'
+      $init_script_path      = '/etc/init.d/serf'
     }
     'debian': {
       $init_script_url      = 'https://raw.github.com/hashicorp/serf/master/ops-misc/upstart.conf'
-      $init_script_dir      = '/etc/init'
-      $init_script_filename = 'serf.conf'
+      $init_script_path      = '/etc/init/serf.conf'
     }
   }
 }
