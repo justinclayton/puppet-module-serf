@@ -59,7 +59,7 @@ class serf (
     ensure  => directory,
   } ->
 
-  staging::file { 'serf-init':
+  staging::file { $init_script_path:
     source => $init_script_url,
     target => $init_script_path,
   } ->
