@@ -36,7 +36,6 @@
 class serf (
   $version              = '0.4.1',
   $bin_dir              = '/usr/local/bin',
-  $conf_dir             = '/etc/serf',
   $handlers_dir         = '/etc/serf/handlers',
   $arch                 = $serf::params::arch,
   $init_script_url      = $serf::params::init_script_url,
