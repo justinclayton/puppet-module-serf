@@ -54,7 +54,7 @@ class serf (
     creates => "${bin_dir}/serf",
   } ->
 
-  file { [$conf_dir, $handlers_dir]:
+  file { [$handlers_dir, '/etc/serf']:
     ensure  => directory,
   } ->
 
@@ -69,7 +69,7 @@ class serf (
   }
 
   file { 'config.json':
-    path   => "${conf_dir}/config.json",
+    path   => "/etc/serf/config.json",
     content => template('serf/config.json.erb'),
     notify  => Service['serf'],
   }
