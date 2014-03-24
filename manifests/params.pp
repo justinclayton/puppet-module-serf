@@ -8,9 +8,9 @@ class serf::params {
   }
 
   case $::architecture {
-    'x86_64': { $arch = 'amd64' }
-    'i386':   { $arch = '386'   }
-    default:  { fail("Unsupported kernel architecture \"${::architecture}\". Module only supports i386 and x86_64. Serf supports arm, but module is untested.") }
+    'x86_64', 'amd64': { $arch = 'amd64' }
+    'i386':            { $arch = '386'   }
+    default:           { fail("Unsupported kernel architecture \"${::architecture}\". Module only supports i386 and x86_64. Serf supports arm, but module is untested.") }
   }
 
   case $::osfamily {
