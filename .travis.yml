@@ -1,5 +1,7 @@
----
 language: ruby
-script: "bundle exec rake spec"
+script: bundle exec rake spec
 rvm:
-  - 2.0.0
+- 2.0.0
+env:
+  global:
+    secure: TMW4Zo2YKegaJW2YpbnC9sJxf1Do5HdP3bVXgz/xrjZedxWl/ekbdrbQTNCgT+07akcCkvCsyOzl3ResGf38yTPWUKviQ8e53VbVH78sXK7/1uofEZNGmZ/LfryC5HjycXlHbJo0Xbisl7LEZHo7tBcLyX2kiJHMXFwSDLXTxb4=
