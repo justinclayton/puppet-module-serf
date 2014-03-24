@@ -16,11 +16,12 @@ class serf::params {
   case $::osfamily {
     'redhat': {
       $init_script_url      = 'https://raw.github.com/hashicorp/serf/master/ops-misc/serf.sysv.init'
-      $init_script_path      = '/etc/init.d/serf'
+      $init_script_path     = '/etc/init.d/serf'
     }
     'debian': {
       $init_script_url      = 'https://raw.github.com/hashicorp/serf/master/ops-misc/upstart.conf'
-      $init_script_path      = '/etc/init/serf.conf'
+      $init_script_path     = '/etc/init/serf.conf'
     }
+    default: { fail("Unsupported OS family \"${::osfamily}\". Module only supports redhat and debian. Serf supports others, but module is untested.") }
   }
 }

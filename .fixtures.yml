@@ -1,6 +1,5 @@
 fixtures:
-  # repositories:
-  #   staging: "https://github.com/nanliu/puppet-staging.git"
+  repositories:
+    staging: "https://github.com/nanliu/puppet-staging.git"
   symlinks:
     serf: "#{source_dir}"
-    staging: "#{source_dir}/../puppet/librarian/staging"

@@ -10,20 +10,22 @@ $config_hash_param_value = {
 
 describe 'serf', :type => :class do
   let(:params) {{
-    :version    => '0.4.1',
-    :bin_dir    => '/usr/local/bin',
-    :config_hash => $config_hash_param_value,
+    :version      => '0.4.1',
+    :bin_dir      => '/usr/local/bin',
+    :config_hash  => $config_hash_param_value,
   }}
 
   context 'on linux' do
     let(:facts) {{
       :kernel       => 'Linux',
       :architecture => 'i386',
+      :osfamily     => 'redhat'
     }}
     context '32-bit' do
       let(:facts) {{
         :kernel       => 'Linux',
         :architecture => 'i386',
+        :osfamily     => 'redhat'
       }}
       it 'should download serf' do
         should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.4.1_linux_386.zip')
@@ -39,6 +41,7 @@ describe 'serf', :type => :class do
       let(:facts) {{
         :kernel       => 'Linux',
         :architecture => 'x86_64',
+        :osfamily     => 'redhat'
       }}
       it 'should download serf' do
         should contain_staging__file('serf.zip').with_source('https://dl.bintray.com/mitchellh/serf/0.4.1_linux_amd64.zip')
@@ -54,6 +57,7 @@ describe 'serf', :type => :class do
       let(:facts) {{
         :kernel       => 'Linux',
         :architecture => 'fuuuu',
+        :osfamily     => 'redhat'
       }}
       it 'should fail with an error' do
         expect { subject }.to raise_error(Puppet::Error,/Unsupported kernel architecture \"fuuuu\"/)
@@ -64,12 +68,11 @@ describe 'serf', :type => :class do
         :path => '/etc/serf/config.json',
       })
     end
-    it 'should manage event handler scripts' do
-      pending 'not sure if i even need this'
+    it 'should manage event handler script dir' do
       should contain_file('/etc/serf/handlers')
     end
     it 'should manage serf agent as a service' do
-      should contain_file('serf.sysv.init').with({
+      should contain_file('/etc/init.d/serf').with({
         :path => '/etc/init.d/serf',
         :mode => '0755',
       })

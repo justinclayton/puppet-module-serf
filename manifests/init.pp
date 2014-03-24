@@ -12,6 +12,9 @@
 #
 # [*handlers_dir*]
 #   Where to put the event handler scripts managed by this module.
+#
+# [*config_hash*]
+#   Use this to populate the JSON config file for serf.
 # === Examples
 #
 #  You can invoke this module with simply:
