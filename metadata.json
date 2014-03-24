@@ -1,0 +1,42 @@
+{
+  "name": "justinclayton-serf",
+  "version": "1.0.0",
+  "source": "https://github.com/justinclayton/puppet-module-serf.git",
+  "author": "justinclayton",
+  "license": "MIT",
+  "summary": "Downloads serf and manages serf agents",
+  "description": "\n  Downloads the serf binary from http://serfdom.io,\n  installs the appropriate init script,\n  and manages agent configuration",
+  "project_page": "https://github.com/justinclayton/puppet-module-serf",
+  "dependencies": [
+    {
+      "name": "nanliu/staging",
+      "version_requirement": ">= 0.3.1"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "RedHat",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    },
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "5",
+        "6"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ]
+}

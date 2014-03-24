@@ -1,2 +1,4 @@
 .rspec_system
+.puppetforge.yml
+pkg/
 spec/fixtures
