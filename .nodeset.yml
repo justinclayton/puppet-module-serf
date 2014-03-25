@@ -9,10 +9,6 @@ sets:
     nodes:
       "centos6.serf.vm":
         prefab: 'centos-64-x64'
-  'fedora-18-x64':
-    nodes:
-      "fedora18.serf.vm":
-        prefab: 'fedora-18-x64'
   'debian-607-x64':
     nodes:
       "debian6.serf.vm":
